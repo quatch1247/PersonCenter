@@ -91,13 +91,13 @@ public class AuctionController {
 		return "boards_auction/a_home";
 	}
 
-	@RequestMapping(value = "/insert", method = RequestMethod.GET)
+	@RequestMapping(value = "/a_insert", method = RequestMethod.GET)
 	public String insertBoard() {
 		logger.info("글 작성 화면으로 이동");
 		return "boards_auction/a_insert";
 	}
 
-	@RequestMapping(value = "/insert", method = RequestMethod.POST)
+	@RequestMapping(value = "/a_insert", method = RequestMethod.POST)
 	public String insertBoard(Auction auction, MultipartFile upload, Model model) {
 		System.out.println("upload 파일명: " + upload);
 		String board_id = (String) session.getAttribute("loginid");
@@ -126,6 +126,7 @@ public class AuctionController {
 		return "boards_auction/a_home";
 	}
 
+	
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
 	public String getBoard(Model model, int page, String friend_id, int board_num) {
 		String loginid = (String) session.getAttribute("loginid");
@@ -367,8 +368,6 @@ public class AuctionController {
 
 	@RequestMapping(value = "/friendRequest", method = RequestMethod.POST)
 	public String friendRequest(String friend_id, Model model,int board_num,
-			@RequestParam(value = "searchType", defaultValue = "") String searchType,
-			@RequestParam(value = "searchContent", defaultValue = "") String searchContent,
 			HttpServletResponse response,
 			HttpServletRequest request) throws IOException {
 		
@@ -379,7 +378,9 @@ public class AuctionController {
 		PrintWriter out = response.getWriter(); 
 		 
 		if (checkRelationship == null) {
-			int result = fRepository.friendRequest_2(cus_id, friend_id,board_num);
+			
+			//result변수에다가 현재 접속한아이디(=cus_id), 게시글 작성한사람아이디(=friend_id), 게시판(board_num)
+			int result = fRepository.friendRequest_2(cus_id, friend_id, board_num);
 			logger.info("친구 추가 : " + result);
 			out.println("<script>" + "alert('거래요청을 보냈습니다.');"+ "history.go(-1);"+ "</script>"); 
 			out.flush();
@@ -392,16 +393,11 @@ public class AuctionController {
 			out.println("<script>" + "alert('거래수락상태입니다.');"+ "history.go(-1);"+ "</script>"); 
 			out.flush();
 		}
-		model.addAttribute("searchType", searchType);
-		model.addAttribute("searchContent", searchContent);
-		ArrayList<Customer> friends = fRepository.findFriends(searchType, searchContent);
-		model.addAttribute("friends", friends);
 		
 		System.out.println(checkRelationship);
 		 //페이지 새로고침
 	
 
-	
 		return null;
 	}
 

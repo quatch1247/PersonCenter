@@ -172,10 +172,9 @@ public class BoardController {
 
 		// 거래요청 보낸 목록(아이디와 게시판 일련번호 통해서 조회)
 		ArrayList<String> request = fRepository.getRequestList(loginid, board_num);
-
+		
 		// 리플라이 부분
 		ArrayList<Reply> reply = rRepository.getReplies(board_num);
-
 		
 		model.addAttribute("board_status", board_status);
 		model.addAttribute("request", request);
@@ -197,7 +196,7 @@ public class BoardController {
 
 		String originalfile = board.getBoard_fileid();
 		System.out.println("파일아이디 : " + board.getBoard_fileid());
-
+		
 		try {
 			response.setHeader("Content-Disposition",
 					"attachment;filename=" + URLEncoder.encode(originalfile, "UTF-8"));
@@ -366,18 +365,18 @@ public class BoardController {
 
 	@RequestMapping(value = "/friendRequest", method = RequestMethod.POST)
 	public String friendRequest(String friend_id, Model model,int board_num,
-			@RequestParam(value = "searchType", defaultValue = "") String searchType,
-			@RequestParam(value = "searchContent", defaultValue = "") String searchContent,
 			HttpServletResponse response,
 			HttpServletRequest request) throws IOException {
 		
 		String cus_id = (String) session.getAttribute("loginid");
+		
 		String checkRelationship = fRepository.getStatus_2(cus_id, friend_id, board_num);
 		
 		response.setContentType("text/html; charset=UTF-8"); 
 		PrintWriter out = response.getWriter(); 
 		 
 		if (checkRelationship == null) {
+			
 			int result = fRepository.friendRequest_2(cus_id, friend_id,board_num);
 			logger.info("친구 추가 : " + result);
 			out.println("<script>" + "alert('거래요청을 보냈습니다.');"+ "history.go(-1);"+ "</script>"); 
@@ -391,16 +390,10 @@ public class BoardController {
 			out.println("<script>" + "alert('거래수락상태입니다.');"+ "history.go(-1);"+ "</script>"); 
 			out.flush();
 		}
-		model.addAttribute("searchType", searchType);
-		model.addAttribute("searchContent", searchContent);
-		ArrayList<Customer> friends = fRepository.findFriends(searchType, searchContent);
-		model.addAttribute("friends", friends);
 		
 		System.out.println(checkRelationship);
 		 //페이지 새로고침
-	
 
-	
 		return null;
 	}
 

@@ -24,7 +24,7 @@
 
 <script>
 function acceptFriend(friend_id) {
-	confirm("거래신청을 하시겠습니까? ")
+	confirm("거래수락을 하시겠습니까? ")
 	{
 		$
 				.ajax({

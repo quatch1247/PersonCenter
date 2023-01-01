@@ -22,7 +22,7 @@
 		<div class="nt-container px-0 px-sm-4 px-xl-0 pt-0 pt-sm-4">
 
 			<!-- 메인 -->
-			<form action="insert" method="post" enctype="multipart/form-data">
+			<form action="a_insert" method="post" enctype="multipart/form-data">
 			<div class="WritingCommerce">
 				<div class="form_box">
 					<h4 class="form_label">
